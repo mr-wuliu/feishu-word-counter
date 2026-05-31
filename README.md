@@ -26,6 +26,15 @@
 
 显示块可以拖动，位置会自动记住；双击显示块可以恢复默认位置。
 
+## 发布同步
+
+Greasy Fork 支持从 GitHub Raw URL 同步脚本。发布者可以在 Greasy Fork 脚本编辑页开启同步：
+
+- 同步地址：https://raw.githubusercontent.com/mr-wuliu/feishu-word-counter/main/feishu-word-counter.user.js
+- 同步方式：建议选择 Webhook，或选择自动定期同步
+
+Webhook 需要在 GitHub 仓库添加一个指向 Greasy Fork 的 webhook。Greasy Fork 的 webhook 地址需要登录后在它的 webhook 说明页查看。
+
 ## 统计规则
 
 - 每个中文汉字按 1 个字计。
