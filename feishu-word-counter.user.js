@@ -5,7 +5,7 @@
 // @name:zh-HK   飛書文件即時字數統計
 // @name:zh-MO   飛書文件即時字數統計
 // @namespace    https://github.com/mr-wuliu/feishu-word-counter
-// @version      0.1.3
+// @version      0.1.4
 // @description  Show a live word counter in the lower-right area of Feishu/Lark Docs editor pages.
 // @description:zh-CN  在飞书文档编辑页面右下方实时显示正文中字数，不打断写作流程。
 // @description:zh-TW  在飛書文件編輯頁面右下方即時顯示正文中字數，不打斷寫作流程。
@@ -100,6 +100,7 @@
   let observedEditor = null;
   let observer = null;
   let updateTimer = null;
+  let hasCustomPosition = false;
 
   function createCounter() {
     const existing = document.getElementById(COUNTER_ID);
@@ -130,6 +131,12 @@
     document.documentElement.appendChild(counter);
     restoreCounterPosition(counter);
     enableCounterDrag(counter);
+    window.setTimeout(() => {
+      if (hasCustomPosition) clampCounterPosition(counter);
+    }, 0);
+    window.addEventListener('resize', () => {
+      if (hasCustomPosition) clampCounterPosition(counter);
+    });
     return counter;
   }
 
@@ -144,9 +151,30 @@
       counter.style.top = `${savedPosition.top}px`;
       counter.style.right = 'auto';
       counter.style.bottom = 'auto';
+      hasCustomPosition = true;
+      clampCounterPosition(counter);
     } catch (_error) {
       window.localStorage.removeItem(POSITION_KEY);
+      hasCustomPosition = false;
     }
+  }
+
+  function clampCounterPosition(counter) {
+    const rect = counter.getBoundingClientRect();
+    const maxLeft = Math.max(8, window.innerWidth - counter.offsetWidth - 8);
+    const maxTop = Math.max(8, window.innerHeight - counter.offsetHeight - 8);
+    const left = Math.max(8, Math.min(maxLeft, rect.left));
+    const top = Math.max(8, Math.min(maxTop, rect.top));
+
+    counter.style.left = `${left}px`;
+    counter.style.top = `${top}px`;
+    counter.style.right = 'auto';
+    counter.style.bottom = 'auto';
+
+    window.localStorage.setItem(POSITION_KEY, JSON.stringify({
+      left: Math.round(left),
+      top: Math.round(top),
+    }));
   }
 
   function enableCounterDrag(counter) {
@@ -156,6 +184,7 @@
 
     counter.addEventListener('dblclick', () => {
       window.localStorage.removeItem(POSITION_KEY);
+      hasCustomPosition = false;
       counter.style.left = 'auto';
       counter.style.top = 'auto';
       counter.style.right = '20px';
@@ -185,6 +214,7 @@
       counter.style.top = `${top}px`;
       counter.style.right = 'auto';
       counter.style.bottom = 'auto';
+      hasCustomPosition = true;
     });
 
     counter.addEventListener('pointerup', (event) => {
@@ -192,11 +222,7 @@
 
       dragging = false;
       counter.releasePointerCapture(event.pointerId);
-      const rect = counter.getBoundingClientRect();
-      window.localStorage.setItem(POSITION_KEY, JSON.stringify({
-        left: Math.round(rect.left),
-        top: Math.round(rect.top),
-      }));
+      clampCounterPosition(counter);
     });
   }
 
