@@ -1,7 +1,5 @@
 # 飞书文档实时字数统计油猴脚本
 
-作者：mr-wuliu
-
 这个目录包含一个 Tampermonkey / Violentmonkey userscript：
 
 - `feishu-word-counter.user.js`
