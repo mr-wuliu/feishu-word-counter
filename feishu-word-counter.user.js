@@ -5,7 +5,7 @@
 // @name:zh-HK   飛書文件即時字數統計
 // @name:zh-MO   飛書文件即時字數統計
 // @namespace    https://github.com/mr-wuliu/feishu-word-counter
-// @version      0.1.4
+// @version      0.1.5
 // @description  Show a live word counter in the lower-right area of Feishu/Lark Docs editor pages.
 // @description:zh-CN  在飞书文档编辑页面右下方实时显示正文中字数，不打断写作流程。
 // @description:zh-TW  在飛書文件編輯頁面右下方即時顯示正文中字數，不打斷寫作流程。
@@ -34,6 +34,7 @@
   const COUNTER_ID = 'feishu-live-word-counter';
   const POSITION_KEY = 'feishu-live-word-counter-position';
   const UPDATE_DELAY = 250;
+  const EDITOR_REFRESH_DELAY = 1000;
 
   const editorSelectors = [
     '.page-block-children',
@@ -97,9 +98,13 @@
     '[class*="title-input" i]',
   ];
 
+  const ignoredSelectorText = ignoredSelectors.join(',');
+  const titleSelectorText = titleSelectors.join(',');
+
   let observedEditor = null;
   let observer = null;
   let updateTimer = null;
+  let editorRefreshTimer = null;
   let hasCustomPosition = false;
 
   function createCounter() {
@@ -235,25 +240,24 @@
     if (!(element instanceof Element)) return false;
     if (element.id === COUNTER_ID) return true;
     if (!isVisibleElement(element)) return true;
-    return ignoredSelectors.some((selector) => element.matches(selector)) || isTitleElement(element);
+    return matchesAny(element, ignoredSelectorText) || isTitleElement(element);
   }
 
   function isTitleElement(element) {
     if (!(element instanceof Element)) return false;
-    return titleSelectors.some((selector) => element.matches(selector));
+    return matchesAny(element, titleSelectorText);
+  }
+
+  function matchesAny(element, selectorText) {
+    return Boolean(selectorText && element.matches(selectorText));
   }
 
   function hasIgnoredAncestor(element, root) {
-    let current = element;
-    while (current && current !== root) {
-      if (shouldIgnoreElement(current)) {
-        return true;
-      }
+    const ignored = element.closest(ignoredSelectorText);
+    if (ignored && root.contains(ignored)) return true;
 
-      current = current.parentElement;
-    }
-
-    return shouldIgnoreElement(root);
+    const title = element.closest(titleSelectorText);
+    return Boolean(title && root.contains(title));
   }
 
   function collectText(root) {
@@ -320,13 +324,20 @@
       .filter((element) => !isTitleElement(element))
       .map((element) => ({
         element,
-        textLength: collectText(element).length,
+        textLength: getTextLengthHint(element),
         priority: getEditorPriority(element),
       }))
       .filter((candidate) => candidate.textLength > 0)
       .sort((a, b) => b.priority - a.priority || b.textLength - a.textLength);
 
     return bodyCandidates[0] ? bodyCandidates[0].element : document.body;
+  }
+
+  function getTextLengthHint(element) {
+    return (element.textContent || '')
+      .replace(/[\u200B-\u200D\uFEFF]/g, '')
+      .trim()
+      .length;
   }
 
   function getEditorPriority(element) {
@@ -345,7 +356,7 @@
     updateTimer = null;
 
     const counter = createCounter();
-    const editor = findEditor();
+    const editor = getCurrentEditor();
     const text = collectText(editor);
     const count = countWords(text);
 
@@ -365,6 +376,31 @@
     updateTimer = window.setTimeout(updateCounter, UPDATE_DELAY);
   }
 
+  function scheduleEditorRefresh() {
+    if (editorRefreshTimer) {
+      window.clearTimeout(editorRefreshTimer);
+    }
+
+    editorRefreshTimer = window.setTimeout(() => {
+      editorRefreshTimer = null;
+      const editor = findEditor();
+      if (editor !== observedEditor) {
+        observeEditor(editor);
+      }
+      scheduleUpdate();
+    }, EDITOR_REFRESH_DELAY);
+  }
+
+  function getCurrentEditor() {
+    if (observedEditor && observedEditor.isConnected && isVisibleElement(observedEditor)) {
+      return observedEditor;
+    }
+
+    const editor = findEditor();
+    observeEditor(editor);
+    return editor;
+  }
+
   function observeEditor(editor) {
     if (observer) {
       observer.disconnect();
@@ -376,8 +412,6 @@
       childList: true,
       subtree: true,
       characterData: true,
-      attributes: true,
-      attributeFilter: ['style', 'class', 'contenteditable'],
     });
   }
 
@@ -387,11 +421,10 @@
     document.addEventListener('paste', scheduleUpdate, true);
     document.addEventListener('cut', scheduleUpdate, true);
     document.addEventListener('compositionend', scheduleUpdate, true);
-    window.addEventListener('hashchange', scheduleUpdate);
-    window.addEventListener('popstate', scheduleUpdate);
+    window.addEventListener('hashchange', scheduleEditorRefresh);
+    window.addEventListener('popstate', scheduleEditorRefresh);
   }
 
   bindEvents();
-  scheduleUpdate();
-  window.setInterval(scheduleUpdate, 3000);
+  scheduleEditorRefresh();
 })();
