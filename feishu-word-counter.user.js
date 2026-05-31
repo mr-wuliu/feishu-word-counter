@@ -7,6 +7,8 @@
 // @homepageURL  https://github.com/mr-wuliu/feishu-word-counter
 // @supportURL   https://github.com/mr-wuliu/feishu-word-counter/issues
 // @icon         https://raw.githubusercontent.com/mr-wuliu/feishu-word-counter/main/feishu.png
+// @downloadURL  https://raw.githubusercontent.com/mr-wuliu/feishu-word-counter/main/feishu-word-counter.user.js
+// @updateURL    https://raw.githubusercontent.com/mr-wuliu/feishu-word-counter/main/feishu-word-counter.user.js
 // @match        https://*.feishu.cn/docx/*
 // @match        https://*.feishu.cn/docs/*
 // @match        https://*.feishu.cn/wiki/*
