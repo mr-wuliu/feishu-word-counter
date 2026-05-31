@@ -1,8 +1,16 @@
 // ==UserScript==
 // @name         Feishu Docs Live Word Counter
+// @name:zh-CN   飞书文档实时字数统计
+// @name:zh-TW   飛書文件即時字數統計
+// @name:zh-HK   飛書文件即時字數統計
+// @name:zh-MO   飛書文件即時字數統計
 // @namespace    https://github.com/mr-wuliu/feishu-word-counter
 // @version      0.1.3
-// @description  在飞书文档编辑页面右下角实时显示当前文档字数。
+// @description  Show a live word counter in the lower-right area of Feishu/Lark Docs editor pages.
+// @description:zh-CN  在飞书文档编辑页面右下方实时显示正文中字数，不打断写作流程。
+// @description:zh-TW  在飛書文件編輯頁面右下方即時顯示正文中字數，不打斷寫作流程。
+// @description:zh-HK  在飛書文件編輯頁面右下方即時顯示正文中字數，不打斷寫作流程。
+// @description:zh-MO  在飛書文件編輯頁面右下方即時顯示正文中字數，不打斷寫作流程。
 // @author       mr-wuliu
 // @license      MIT
 // @homepageURL  https://github.com/mr-wuliu/feishu-word-counter
