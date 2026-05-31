@@ -16,6 +16,8 @@
 // @homepageURL  https://github.com/mr-wuliu/feishu-word-counter
 // @supportURL   https://github.com/mr-wuliu/feishu-word-counter/issues
 // @icon         https://raw.githubusercontent.com/mr-wuliu/feishu-word-counter/main/feishu.png
+// @downloadURL  https://update.greasyfork.org/scripts/580598/Feishu%20Docs%20Live%20Word%20Counter.user.js
+// @updateURL    https://update.greasyfork.org/scripts/580598/Feishu%20Docs%20Live%20Word%20Counter.meta.js
 // @match        https://*.feishu.cn/docx/*
 // @match        https://*.feishu.cn/docs/*
 // @match        https://*.feishu.cn/wiki/*

@@ -5,6 +5,11 @@
 - `feishu-word-counter.user.js`
 - `feishu.png`
 
+## 安装地址
+
+- Greasy Fork：https://greasyfork.org/zh-CN/scripts/580598-feishu-docs-live-word-counter
+- GitHub Raw：https://raw.githubusercontent.com/mr-wuliu/feishu-word-counter/main/feishu-word-counter.user.js
+
 ## 安装
 
 1. 打开 Tampermonkey 管理面板。
