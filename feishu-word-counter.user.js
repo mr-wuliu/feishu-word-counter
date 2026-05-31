@@ -1,12 +1,12 @@
 // ==UserScript==
 // @name         Feishu Docs Live Word Counter
-// @namespace    https://github.com/mr-wuliu/feishu-docs-live-word-counter
+// @namespace    https://github.com/mr-wuliu/feishu-word-counter
 // @version      0.1.3
 // @description  在飞书文档编辑页面右下角实时显示当前文档字数。
 // @author       mr-wuliu
-// @homepageURL  https://github.com/mr-wuliu/feishu-docs-live-word-counter
-// @supportURL   https://github.com/mr-wuliu/feishu-docs-live-word-counter/issues
-// @icon         https://raw.githubusercontent.com/mr-wuliu/feishu-docs-live-word-counter/main/feishu.png
+// @homepageURL  https://github.com/mr-wuliu/feishu-word-counter
+// @supportURL   https://github.com/mr-wuliu/feishu-word-counter/issues
+// @icon         https://raw.githubusercontent.com/mr-wuliu/feishu-word-counter/main/feishu.png
 // @match        https://*.feishu.cn/docx/*
 // @match        https://*.feishu.cn/docs/*
 // @match        https://*.feishu.cn/wiki/*
