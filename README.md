@@ -4,11 +4,16 @@
 
 - `feishu-word-counter.user.js`
 - `feishu.png`
+- `feishu-screenshot.jpg`
 
 ## 安装地址
 
 - Greasy Fork：https://greasyfork.org/zh-CN/scripts/580598-feishu-docs-live-word-counter
 - GitHub Raw：https://raw.githubusercontent.com/mr-wuliu/feishu-word-counter/main/feishu-word-counter.user.js
+
+## 使用截图
+
+![飞书文档实时字数统计使用截图](./feishu-screenshot.jpg)
 
 ## 安装
 
